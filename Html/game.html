@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+</head>
+<body>
+<p href =></p>    
+<style>
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(270deg, #ee0979, #ff6a9a, #fad0c4, #ffb6c1, #ee0979);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  text-align: center;
+  padding: 20px;
+  color: #333;
+  min-height: 100vh;
+}
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 600px;
+  margin: auto;
+}
+input {
+  padding: 10px;
+  width: 70%;
+  margin-top: 10px;
+}
+button {
+  padding: 10px 15px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#lyric {
+  font-size: 20px;
+  margin: 20px 0;
+}
+.hidden { display: none; }
+
+#start { padding: 10px 0 20px; }
+#start h2 { font-size: 22px; margin-bottom: 6px; }
+.rules-box {
+  background: #fff0f5;
+  border: 1.5px solid #f9a8c9;
+  border-radius: 12px;
+  padding: 16px 20px;
+  text-align: left;
+  margin: 18px 0 22px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.rules-box ul { margin: 8px 0 0 0; padding-left: 20px; }
+.rules-box li { margin-bottom: 6px; }
+.start-btn {
+  background: linear-gradient(135deg, #ee0979, #ff6a9a);
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 13px 36px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 14px rgba(238,9,121,0.25);
+}
+.start-btn:hover { opacity: 0.9; }
+
+#endless-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+#endless-counter {
+  font-size: 13px;
+  color: #a855f7;
+  margin: 4px 0 0;
+  font-weight: bold;
+}
+
+#win { padding: 10px 0 20px; }
+.win-trophy { font-size: 60px; margin: 10px 0 6px; }
+#win h2 { font-size: 26px; color: #ee0979; margin-bottom: 6px; }
+.win-score { font-size: 42px; font-weight: bold; color: #ee0979; margin: 10px 0 4px; }
+.win-label { font-size: 14px; color: #999; margin-bottom: 18px; }
+.win-msg {
+  background: #fff0f5;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 20px;
+}
+.win-btn {
+  background: linear-gradient(135deg, #ee0979, #ff6a9a);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 11px 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  margin: 6px;
+}
+.win-btn:hover { opacity: 0.9; }
+.endless-btn {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 11px 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  margin: 6px;
+}
+.endless-btn:hover { opacity: 0.9; }
+</style>
+
+<div class="container">
+  <h1>🎤 Kpop Lyric Guess Game</h1>
+
+  <!-- START SCREEN -->
+  <div id="start">
+    <h2>Welcome! 👋</h2>
+    <p style="color:#777; font-size:15px; margin-bottom:0;">Think you know your Kpop? Put your knowledge to the test!</p>
+    <div class="rules-box">
+      <strong>How to play:</strong>
+      <ul>
+        <li>You'll be shown a lyric snippet — guess which <strong>Kpop group</strong> it's from.</li>
+        <li>Type the group name and hit <strong>Submit</strong> or press <strong>Enter</strong>.</li>
+        <li>Each correct answer earns <strong>10 pts + combo bonus</strong>. Keep a streak going for extra points!</li>
+        <li>You have <strong>3 lives</strong> — a wrong answer costs one life.</li>
+        <li>Stuck? Use <strong>Hint</strong> for a clue (costs 5 pts) or <strong>Skip</strong> to move on.</li>
+        <li>Reach <strong>100 points</strong> to win! Hit that milestone to unlock <strong>♾ Endless Mode</strong>.</li>
+      </ul>
+    </div>
+    <button class="start-btn" onclick="beginGame()">🎵 Start Game</button>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game" class="hidden">
+    <p id="lyric"></p>
+    <input type="text" id="answer" placeholder="Enter group name">
+    <br>
+    <button onclick="submitAnswer()">Submit</button>
+    <button onclick="skip()">Skip</button>
+    <button onclick="hint()">Hint (-5 pts)</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span><span id="endless-badge" class="hidden">♾ ENDLESS</span></p>
+    <p id="endless-counter" class="hidden">Questions answered: <span id="endless-count">0</span></p>
+    <p>Lives: <span id="lives">3</span></p>
+    <p>Combo: <span id="combo">0</span></p>
+  </div>
+
+  <!-- WIN SCREEN -->
+  <div id="win" class="hidden">
+    <div class="win-trophy">🏆</div>
+    <h2>You Win!</h2>
+    <div class="win-score" id="winScore">0</div>
+    <div class="win-label">points scored</div>
+    <div class="win-msg">You hit 100 points — you're a certified Kpop lyric expert! 🎉<br><br>Want to keep going? Try <strong>Endless Mode</strong> — infinite questions, no finish line. How long can you last?</div>
+    <button class="endless-btn" onclick="startEndless()">♾ Endless Mode</button>
+    <button class="win-btn" onclick="restart()">🔄 Play Again</button>
+  </div>
+
+  <!-- GAME OVER SCREEN -->
+  <div id="end" class="hidden">
+    <h2>Game Over</h2>
+    <p id="finalScore"></p>
+    <p id="rank"></p>
+    <button onclick="restart()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const pool = [
+  { lyric: "Obun keot wanbyeokan My makeup tutorial", group: "illit", hint: "rookie hybe girl group" },
+  { lyric: "Baby, I'm just trying to play it cool but, I just can't hide that, I want you", group: "illit", hint: "magnetic group" },
+  { lyric: "Say goodbye but I'll always love you", group: "izna", hint: "Iland 2" },
+  { lyric: "We bout to blow it up and make a scene", group: "izna", hint: "Wakeone Girl Group" },
+  { lyric: "You pass the drip check super lit yeah", group: "izna", hint: "2024 Survival Show" },
+  { lyric: "Got me burning, got me burning up", group: "meovv", hint: "The Black Label Girl Group" },
+  { lyric: "Wons and yens and dollars, comma comma comma", group: "meovv", hint: "Only girl group in their label" },
+  { lyric: "i do me, i do me right", group: "kiikii", hint: "Starship Ent." },
+  { lyric: "When I'm dancing alone im not dreaming alone I can feel it", group: "kiikii", hint: "Ive's sister group" },
+  { lyric: "I'm not bad, you can't make me act right", group: "hearts2hearts", hint: "Newest SM group" },
+  { lyric: "I cannot focus on anything but you baby", group: "hearts2hearts", hint: "9 members" },
+  { lyric: "Wonder woman so no wonder who they want to be", group: "izna", hint: "Title track self titled" },
+  { lyric: "You know what? not even God can stop me, I'll like you", group: "illit", hint: "RUnext" },
+  { lyric: "Together we're so toxic", group: "meovv", hint: "5 members" },
+  { lyric: "Criss-cross, lip gloss, missed some, gwenchana, uh uh", group: "kiikii", hint: "MV choreography" },
+  { lyric: "Just like the movie, devil game, drama", group: "zerobaseone", hint: "HYBE boy group, ZB1" },
+  { lyric: "Boom, on top of the moon, No gravity stopping us", group: "zerobaseone", hint: "Boys Planet survival show" },
+  { lyric: "Oh, baby, I'll make you sweat sweat, sweat, sweat, sweat", group: "zerobaseone", hint: "9-member boy group" },
+  { lyric: "Tick Tock counting on you", group: "alphadriveone", hint: "ADO — rising rookie group" },
+  { lyric: "Watch me raw flame, raw flame just like a savage", group: "alphadriveone", hint: "AlphaDriveOne" },
+  { lyric: "Ne nunbicheun so deeper nd I feel so better Love is chain", group: "alphadriveone", hint: "ADO debut era" },
+  { lyric: "I really want to kick it with you baby", group: "tws", hint: "PLEDIS boy group" },
+  { lyric: "you make me overdrive", group: "tws", hint: "Tomorrow x Together labelmates" },
+  { lyric: "Head, Shoulders, Knees and toes", group: "tws", hint: "5-member boy group" }
+];
+
+let questions = [];
+let current = 0;
+let score = 0;
+let lives = 3;
+let combo = 0;
+let winTriggered = false;
+let endlessMode = false;
+let endlessCount = 0;
+let endlessPool = [];
+let endlessIndex = 0;
+
+function beginGame() {
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  startGame();
+}
+
+function startGame() {
+  endlessMode = false;
+  endlessCount = 0;
+  questions = pool.slice().sort(() => 0.5 - Math.random()).slice(0, 10);
+  current = 0;
+  score = 0;
+  lives = 3;
+  combo = 0;
+  winTriggered = false;
+  document.getElementById("endless-badge").classList.add("hidden");
+  document.getElementById("endless-counter").classList.add("hidden");
+  updateUI();
+  showQuestion();
+}
+
+function startEndless() {
+  document.getElementById("win").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  endlessMode = true;
+  endlessCount = 0;
+  endlessPool = pool.slice().sort(() => 0.5 - Math.random());
+  endlessIndex = 0;
+  combo = 0;
+  winTriggered = false;
+  document.getElementById("endless-badge").classList.remove("hidden");
+  document.getElementById("endless-counter").classList.remove("hidden");
+  updateUI();
+  showEndlessQuestion();
+}
+
+function showQuestion() {
+  document.getElementById("lyric").innerText = questions[current].lyric;
+  document.getElementById("answer").value = "";
+  document.getElementById("feedback").innerText = "";
+}
+
+function showEndlessQuestion() {
+  if (endlessIndex >= endlessPool.length) {
+    endlessPool = pool.slice().sort(() => 0.5 - Math.random());
+    endlessIndex = 0;
+  }
+  document.getElementById("lyric").innerText = endlessPool[endlessIndex].lyric;
+  document.getElementById("answer").value = "";
+  document.getElementById("feedback").innerText = "";
+  document.getElementById("endless-count").innerText = endlessCount;
+}
+
+function normalize(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+document.getElementById("answer").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") { submitAnswer(); }
+});
+
+function flash(color) {
+  const container = document.querySelector(".container");
+  container.style.background = color;
+  setTimeout(() => { container.style.background = "white"; }, 300);
+}
+
+function checkWin() {
+  if (!endlessMode && score >= 100 && !winTriggered) {
+    winTriggered = true;
+    setTimeout(() => {
+      document.getElementById("game").classList.add("hidden");
+      document.getElementById("win").classList.remove("hidden");
+      document.getElementById("winScore").innerText = score;
+    }, 700);
+    return true;
+  }
+  return false;
+}
+
+function submitAnswer() {
+  const inputBox = document.getElementById("answer");
+  const user = normalize(inputBox.value);
+  const correct = endlessMode
+    ? normalize(endlessPool[endlessIndex].group)
+    : normalize(questions[current].group);
+
+  if (user === correct) {
+    combo++;
+    score += 10 + (combo * 2);
+    document.getElementById("feedback").innerText = "✅ Correct!";
+    inputBox.style.border = "3px solid green";
+    flash("#c8f7c5");
+  } else {
+    lives--;
+    combo = 0;
+    document.getElementById("feedback").innerText = "❌ Wrong!";
+    inputBox.style.border = "3px solid red";
+    flash("#f7c5c5");
+  }
+
+  updateUI();
+  if (checkWin()) return;
+
+  setTimeout(() => {
+    inputBox.style.border = "";
+    next();
+  }, 600);
+}
+
+function skip() {
+  combo = 0;
+  next();
+}
+
+function hint() {
+  const h = endlessMode ? endlessPool[endlessIndex].hint : questions[current].hint;
+  score -= 5;
+  document.getElementById("feedback").innerText = "Hint: " + h;
+  updateUI();
+}
+
+function next() {
+  if (endlessMode) {
+    endlessIndex++;
+    endlessCount++;
+    if (lives <= 0) {
+      endGame();
+    } else {
+      showEndlessQuestion();
+      updateUI();
+    }
+  } else {
+    current++;
+    if (lives <= 0 || current >= questions.length) {
+      endGame();
+    } else {
+      showQuestion();
+    }
+  }
+}
+
+function updateUI() {
+  document.getElementById("score").innerText = score;
+  document.getElementById("lives").innerText = lives;
+  document.getElementById("combo").innerText = combo;
+  if (endlessMode) {
+    document.getElementById("endless-count").innerText = endlessCount;
+  }
+}
+
+function endGame() {
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("end").classList.remove("hidden");
+  let display = "Score: " + score;
+  if (endlessMode) display += " | Questions answered: " + endlessCount;
+  document.getElementById("finalScore").innerText = display;
+
+  let rank = "C";
+  if (score > 120) rank = "S";
+  else if (score > 90) rank = "A";
+  else if (score > 60) rank = "B";
+  document.getElementById("rank").innerText = endlessMode ? "Endless run over. You're a legend! 🎤" : "Rank: " + rank;
+}
+
+function restart() {
+  document.getElementById("end").classList.add("hidden");
+  document.getElementById("win").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  startGame();
+}
+</script>
+<a href="../index.html">
+  <button style="padding:10px 15px;font-size:14px;background-color:#ee0979;color:white;border:none;border-radius:8px;cursor:pointer;margin-top:12px;">
+    ⬅ Back to Home
+  </button>
+
+</a>
+</body>
+</html>

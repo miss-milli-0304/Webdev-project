@@ -1,0 +1,113 @@
+/* BODY */
+body {
+    background-color: #f8f5f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    padding-right: 6px;
+}
+
+/* LINKS */
+a:hover {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+a:visited {
+    color: rgb(46, 46, 114);
+}
+
+/* TITLES */
+.bigtitle {
+    border-top: 3px solid #ccc;
+    border-bottom: 3px solid #ccc;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+}
+
+.title {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+/* DIVIDER */
+.line {
+    border: solid 2px #ccc;
+    width: 60%;
+    margin: 20px auto;
+}
+
+/* MAIN IMAGE */
+.bigpicture {
+    display: block;
+    margin: 20px auto;
+    max-width: 60%;
+    border: solid 4px #ddd;
+    border-radius: 10px;
+}
+
+/* BIO */
+.bio {
+    text-align: center;
+    font-size: large;
+    max-width: 800px;
+    margin: 10px auto;
+}
+
+/* FIXED AWARDS LIST */
+ol.bio {
+    text-align: left;
+    padding-left: 25px;
+}
+
+ol.bio ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+/* MEMBER SECTION */
+.info {
+    font-size: larger;
+    text-align: center;
+    margin: 25px auto;
+    max-width: 600px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+/* MEMBER IMAGES */
+.memberpics {
+    display: block;
+    margin: 10px auto;
+    max-width: 80%;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* MEMBER LISTS (no bullets like your original intent) */
+.info ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* NOTE */
+.note {
+    font-size: medium;
+    text-align: center;
+    margin-top: 10px;
+    color: #666;
+}
+iframe {
+    display: block;
+    margin: 20px auto;
+}
+.tableauPlaceholder{ display: block;
+    margin: 20px auto;
+    max-width: 100%;}
